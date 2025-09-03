@@ -25,7 +25,7 @@ function GlassInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
       className="w-full rounded-lg px-4 py-2 bg-white/30 dark:bg-white/5 backdrop-blur-md text-black dark:text-white placeholder-black/40 dark:placeholder-white/50 border border-black/10 dark:border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
     />
   );
-}
+} 
 function GlassTextarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return (
     <textarea
