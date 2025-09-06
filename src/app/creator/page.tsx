@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Pencil, Trash2, Plus, X, BookOpen, PlayCircle, FileText } from "lucide-react";
 import classNames from "classnames";
-import { motion } from "framer-motion"; // Add this import at the top
+import { motion } from "framer-motion";
 
 // --- Glass Components ---
 function GlassButton({ children, className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {

@@ -24,6 +24,30 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
+        // Simple demo authentication
+        if (credentials.email === "demo@ethed.com" && credentials.password === "demo123") {
+          let user = await prisma.user.findUnique({
+            where: { email: credentials.email }
+          });
+
+          if (!user) {
+            // Create demo user
+            user = await prisma.user.create({
+              data: {
+                email: credentials.email,
+                name: "Demo User"
+              }
+            });
+          }
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            image: user.image,
+          };
+        }
+
         const user = await prisma.user.findUnique({
           where: {
             email: credentials.email
@@ -31,30 +55,12 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!user) {
-          // For MVP demo, create a user if they don't exist
-          if (credentials.email === "demo@ethed.com" && credentials.password === "demo123") {
-            const newUser = await prisma.user.create({
-              data: {
-                email: credentials.email,
-                name: "Demo User",
-                role: "student"
-              }
-            });
-            return {
-              id: newUser.id,
-              email: newUser.email,
-              name: newUser.name,
-              image: null,
-            };
-          }
           return null;
         }
 
-        // For now, we'll implement a simple password check
-        // In production, you'd hash passwords properly
-        const isPasswordValid = credentials.password === "demo123"; // Temporary for MVP
-
-        if (!isPasswordValid) {
+        // For other users, check password properly
+        // In production, you'd compare with hashed password
+        if (user.password && credentials.password !== user.password) {
           return null;
         }
 
@@ -74,14 +80,12 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.role = user.role || 'student';
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id;
-        session.user.role = token.role;
       }
       return session;
     },

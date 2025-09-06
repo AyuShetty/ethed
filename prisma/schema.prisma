@@ -15,10 +15,11 @@ model User {
   address       String?  @unique
   name          String?
   email         String?  @unique
+  password      String?
   emailVerified DateTime?
   image         String?
-  role          String   @default("student") // "student", "instructor", "admin"
   bio           String?
+  role          Role     @default(STUDENT)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   
@@ -27,6 +28,12 @@ model User {
   sessions      Session[]
   createdCourses Course[] @relation("CourseCreator")
   enrollments   Enrollment[]
+}
+
+enum Role {
+  ADMIN
+  INSTRUCTOR
+  STUDENT
 }
 
 model Account {
